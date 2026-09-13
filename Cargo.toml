@@ -14,7 +14,14 @@ keywords = ["user"]
 serde = { version = "1.0", features = ["derive"] }
 
 [target.'cfg(target_os = "windows")'.dependencies]
-windows = { version = "0.62", features = ["Security_Credentials"] }
+windows = { version = "0.62", features = [
+    "Win32_NetworkManagement_NetManagement",
+    "Win32_Security_Authentication_Identity",
+    "Win32_System_WindowsProgramming",
+] }
 
 [target.'cfg(target_os = "macos")'.dependencies]
 objc2-foundation = "0.3"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libc = "0.2"
