@@ -8,7 +8,8 @@ readme = "README.md"
 license = "MIT"
 description = "A cross-platform library for gathering user information."
 repository = "https://github.com/NickvisionApps/utente"
-keywords = ["user"]
+keywords = ["user", "username", "account", "cross-platform"]
+categories = ["os"]
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }

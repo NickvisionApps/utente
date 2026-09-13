@@ -2,6 +2,14 @@ use crate::User;
 use std::ffi::CStr;
 
 impl User {
+    /// Returns the current user, using `getpwuid_r` for the effective user
+    /// ID.
+    ///
+    /// The username comes from the passwd entry's `pw_name` field. The full
+    /// name comes from the first comma-separated field of `pw_gecos` (the
+    /// `finger`-style GECOS convention: `"Full Name,Room,Work
+    /// Phone,Home Phone"`). If that field is empty, [`User::full_name`]
+    /// falls back to the username.
     pub fn current() -> Self {
         let mut passwd: libc::passwd = unsafe { std::mem::zeroed() };
         let mut result: *mut libc::passwd = std::ptr::null_mut();

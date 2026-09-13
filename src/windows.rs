@@ -8,6 +8,15 @@ use windows::Win32::System::WindowsProgramming::GetUserNameW;
 use windows::core::{HSTRING, PCWSTR, PWSTR};
 
 impl User {
+    /// Returns the current user.
+    ///
+    /// The username comes from `GetUserNameW`. The full name is looked up
+    /// via `GetUserNameExW` with the `NameDisplay` format, which requires
+    /// the account to be domain-joined; if that fails or returns an empty
+    /// string, `NetUserGetInfo` (level 10) is used instead, which reads the
+    /// full name from the local user database and works for local/workgroup
+    /// accounts. If neither lookup produces a non-empty full name,
+    /// [`User::full_name`] falls back to the username.
     pub fn current() -> Self {
         let mut username_buffer = [0u16; 257];
         let mut username_len = username_buffer.len() as u32;
