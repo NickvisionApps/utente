@@ -1,0 +1,17 @@
+[package]
+name = "utente"
+version = "0.1.0"
+authors = ["Nick Logozzo <nlogozzo225@gmail.com>"]
+edition = "2024"
+build = "build.rs"
+readme = "README.md"
+license = "MIT"
+description = "A cross-platform library for gathering user information."
+repository = "https://github.com/NickvisionApps/utente"
+keywords = ["user"]
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.62", features = ["Security_Credentials"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2-foundation = "0.3"
