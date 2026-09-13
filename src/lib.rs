@@ -1,5 +1,5 @@
-//! Cross-platform retrieval of the current operating system user's username
-//! and full (display) name.
+//! Cross-platform retrieval of the current operating system user's username,
+//! full (display) name, home directory, and stable identifier.
 //!
 //! The core type is [`User`], obtained via [`User::current`].
 //!
@@ -29,8 +29,10 @@ mod macos;
 mod windows;
 
 use serde::{Deserialize, Serialize};
+use std::path::{Path, PathBuf};
 
-/// The current operating system user's username and full (display) name.
+/// The current operating system user's username, full (display) name, home
+/// directory, and stable identifier.
 ///
 /// # Examples
 ///
@@ -42,16 +44,26 @@ use serde::{Deserialize, Serialize};
 /// assert!(!user.full_name().is_empty());
 /// ```
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct User {
     username: String,
     full_name: String,
+    home_directory: PathBuf,
+    id: String,
 }
 
 impl User {
-    fn new(username: impl Into<String>, full_name: impl Into<String>) -> Self {
+    fn new(
+        username: impl Into<String>,
+        full_name: impl Into<String>,
+        home_directory: impl Into<PathBuf>,
+        id: impl Into<String>,
+    ) -> Self {
         Self {
             username: username.into(),
             full_name: full_name.into(),
+            home_directory: home_directory.into(),
+            id: id.into(),
         }
     }
 
@@ -66,6 +78,17 @@ impl User {
     /// falls back to the username if no full name is set for the account.
     pub fn full_name(&self) -> &str {
         &self.full_name
+    }
+
+    /// Returns the user's home directory.
+    pub fn home_directory(&self) -> &Path {
+        &self.home_directory
+    }
+
+    /// Returns a stable identifier for the user: the UID on Linux and
+    /// macOS, or the SID (e.g. `"S-1-5-21-..."`) on Windows.
+    pub fn id(&self) -> &str {
+        &self.id
     }
 }
 

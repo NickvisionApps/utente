@@ -1,9 +1,10 @@
 use crate::User;
-use objc2_foundation::{NSFullUserName, NSUserName};
+use objc2_foundation::{NSFullUserName, NSHomeDirectory, NSUserName};
+use std::path::PathBuf;
 
 impl User {
-    /// Returns the current user, using `NSUserName` and `NSFullUserName`
-    /// from `Foundation`.
+    /// Returns the current user, using `NSUserName`, `NSFullUserName`, and
+    /// `NSHomeDirectory` from `Foundation`, plus `geteuid` for the user ID.
     ///
     /// If the account has no full name set, [`User::full_name`] falls back
     /// to the username.
@@ -17,6 +18,8 @@ impl User {
             } else {
                 full_name
             },
+            PathBuf::from(NSHomeDirectory().to_string()),
+            unsafe { libc::geteuid() }.to_string(),
         )
     }
 }

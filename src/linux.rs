@@ -1,12 +1,15 @@
 use crate::User;
-use std::ffi::CStr;
+use std::ffi::{CStr, OsStr};
+use std::os::unix::ffi::OsStrExt;
+use std::path::PathBuf;
 
 impl User {
     /// Returns the current user, using `getpwuid_r` for the effective user
     /// ID.
     ///
-    /// The username comes from the passwd entry's `pw_name` field. The full
-    /// name comes from the first comma-separated field of `pw_gecos` (the
+    /// The username comes from the passwd entry's `pw_name` field, the home
+    /// directory from `pw_dir`, and the ID from `pw_uid`. The full name
+    /// comes from the first comma-separated field of `pw_gecos` (the
     /// `finger`-style GECOS convention: `"Full Name,Room,Work
     /// Phone,Home Phone"`). If that field is empty, [`User::full_name`]
     /// falls back to the username.
@@ -31,7 +34,7 @@ impl User {
             break;
         }
         if result.is_null() {
-            return Self::new("", "");
+            return Self::new("", "", "", "");
         }
         let username = unsafe { CStr::from_ptr(passwd.pw_name) }
             .to_string_lossy()
@@ -49,6 +52,10 @@ impl User {
             } else {
                 full_name
             },
+            PathBuf::from(OsStr::from_bytes(
+                unsafe { CStr::from_ptr(passwd.pw_dir) }.to_bytes(),
+            )),
+            passwd.pw_uid.to_string(),
         )
     }
 }
