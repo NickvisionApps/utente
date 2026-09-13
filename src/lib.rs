@@ -8,6 +8,9 @@ pub mod macos;
 #[cfg(target_os = "windows")]
 pub mod windows;
 
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct User {
     username: String,
     full_name: String,
