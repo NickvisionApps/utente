@@ -1,5 +1,5 @@
-use core::ffi::c_void;
 use crate::User;
+use core::ffi::c_void;
 use std::path::PathBuf;
 use windows::Win32::{
     Foundation::{HLOCAL, LocalFree},
