@@ -1,14 +1,16 @@
-use crate::User;
 use core::ffi::c_void;
+use crate::User;
 use std::path::PathBuf;
-use windows::Win32::Foundation::{HLOCAL, LocalFree};
-use windows::Win32::NetworkManagement::NetManagement::{
-    NetApiBufferFree, NetUserGetInfo, USER_INFO_10,
+use windows::Win32::{
+    Foundation::{HLOCAL, LocalFree},
+    NetworkManagement::NetManagement::{NetApiBufferFree, NetUserGetInfo, USER_INFO_10},
+    Security::{
+        Authentication::Identity::{GetUserNameExW, NameDisplay},
+        Authorization::ConvertSidToStringSidW,
+        LookupAccountNameW, PSID, SID_NAME_USE,
+    },
+    System::WindowsProgramming::GetUserNameW,
 };
-use windows::Win32::Security::Authentication::Identity::{GetUserNameExW, NameDisplay};
-use windows::Win32::Security::Authorization::ConvertSidToStringSidW;
-use windows::Win32::Security::{LookupAccountNameW, PSID, SID_NAME_USE};
-use windows::Win32::System::WindowsProgramming::GetUserNameW;
 use windows::core::{HSTRING, PCWSTR, PWSTR};
 
 impl User {
