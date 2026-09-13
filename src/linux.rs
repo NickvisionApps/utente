@@ -32,7 +32,7 @@ impl User {
             .to_string_lossy()
             .split(',')
             .next()
-            .unwrap_or(username)
+            .unwrap_or_default()
             .to_string();
         Self::new(username, full_name)
     }

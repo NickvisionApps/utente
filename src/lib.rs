@@ -40,6 +40,7 @@ mod tests {
     #[test]
     fn get_current() {
         let user = User::current();
+        println!("{:?}", user);
         assert!(!user.username().is_empty());
         assert!(!user.full_name().is_empty());
     }
