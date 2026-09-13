@@ -102,5 +102,7 @@ mod tests {
         println!("{:?}", user);
         assert!(!user.username().is_empty());
         assert!(!user.full_name().is_empty());
+        assert!(user.home_directory().exists());
+        assert!(!user.id().is_empty())
     }
 }
