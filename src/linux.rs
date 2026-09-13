@@ -34,6 +34,13 @@ impl User {
             .next()
             .unwrap_or_default()
             .to_string();
-        Self::new(username, full_name)
+        Self::new(
+            username.clone(),
+            if full_name.is_empty() {
+                username
+            } else {
+                full_name
+            },
+        )
     }
 }

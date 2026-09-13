@@ -3,6 +3,15 @@ use objc2_foundation::{NSFullUserName, NSUserName};
 
 impl User {
     pub fn current() -> Self {
-        Self::new(NSUserName().to_string(), NSFullUserName().to_string())
+        let username = NSUserName().to_string();
+        let full_name = NSFullUserName().to_string();
+        Self::new(
+            username.clone(),
+            if full_name.is_empty() {
+                username
+            } else {
+                full_name
+            },
+        )
     }
 }
